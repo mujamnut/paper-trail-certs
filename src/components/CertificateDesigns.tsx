@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Upload } from 'lucide-react';
+import { Upload, Palette } from 'lucide-react';
 
-export type CertificateDesign = 'classic' | 'modern' | 'elegant' | 'corporate' | 'custom';
+export type CertificateDesign = 'classic' | 'modern' | 'elegant' | 'corporate' | 'tech' | 'custom';
 
 interface CertificateDesignsProps {
   selectedDesign: CertificateDesign;
@@ -17,27 +17,38 @@ interface CertificateDesignsProps {
 const designs = [
   {
     id: 'classic' as CertificateDesign,
-    name: 'Classic Blue',
-    description: 'Traditional blue design with golden accents',
-    preview: 'bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-900'
+    name: 'Design Klasik',
+    description: 'Design tradisional dengan border elegant',
+    preview: 'bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-900',
+    icon: '🏛️'
   },
   {
     id: 'modern' as CertificateDesign,
-    name: 'Modern Green',
-    description: 'Clean modern design with green theme',
-    preview: 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-900'
+    name: 'Design Modern',
+    description: 'Clean modern design dengan tema hijau',
+    preview: 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-900',
+    icon: '✨'
   },
   {
     id: 'elegant' as CertificateDesign,
-    name: 'Elegant Purple',
+    name: 'Design Elegant',
     description: 'Sophisticated purple design',
-    preview: 'bg-gradient-to-br from-purple-50 to-violet-100 border-purple-900'
+    preview: 'bg-gradient-to-br from-purple-50 to-violet-100 border-purple-900',
+    icon: '💎'
   },
   {
     id: 'corporate' as CertificateDesign,
-    name: 'Corporate Gray',
-    description: 'Professional gray design for business',
-    preview: 'bg-gradient-to-br from-gray-50 to-slate-100 border-gray-900'
+    name: 'Design Corporate',
+    description: 'Professional gray design untuk business',
+    preview: 'bg-gradient-to-br from-gray-50 to-slate-100 border-gray-900',
+    icon: '🏢'
+  },
+  {
+    id: 'tech' as CertificateDesign,
+    name: 'Design Tech',
+    description: 'Futuristik untuk acara teknologi',
+    preview: 'bg-gradient-to-br from-cyan-50 to-blue-100 border-cyan-900',
+    icon: '💻'
   }
 ];
 
@@ -83,8 +94,14 @@ const CertificateDesigns: React.FC<CertificateDesignsProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium text-slate-800">Choose Certificate Design</h3>
+    <div className="space-y-6">
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="bg-purple-100 p-2 rounded-lg">
+          <Palette className="h-6 w-6 text-purple-600" />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-800">Pilih Design Sijil</h3>
+      </div>
+      
       <RadioGroup value={selectedDesign} onValueChange={onDesignChange}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {designs.map((design) => (
@@ -96,19 +113,22 @@ const CertificateDesigns: React.FC<CertificateDesignsProps> = ({
               />
               <Label
                 htmlFor={design.id}
-                className={`block cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                className={`block cursor-pointer rounded-2xl border-2 p-6 transition-all duration-300 hover:shadow-lg hover:scale-105 ${
                   selectedDesign === design.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
-                <div className="space-y-3">
-                  <div className={`h-20 w-full rounded border-4 ${design.preview} flex items-center justify-center`}>
-                    <div className="text-xs font-medium opacity-75">Certificate Preview</div>
+                <div className="space-y-4">
+                  <div className={`h-24 w-full rounded-xl border-4 ${design.preview} flex items-center justify-center shadow-sm`}>
+                    <div className="text-center">
+                      <div className="text-2xl mb-1">{design.icon}</div>
+                      <div className="text-xs font-medium opacity-75">Certificate Preview</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-medium text-slate-800">{design.name}</div>
-                    <div className="text-sm text-slate-600">{design.description}</div>
+                  <div className="text-center">
+                    <div className="font-bold text-gray-800 text-lg">{design.name}</div>
+                    <div className="text-sm text-gray-600 mt-1">{design.description}</div>
                   </div>
                 </div>
               </Label>
@@ -124,37 +144,37 @@ const CertificateDesigns: React.FC<CertificateDesignsProps> = ({
             />
             <Label
               htmlFor="custom"
-              className={`block cursor-pointer rounded-lg border-2 p-4 transition-all ${
+              className={`block cursor-pointer rounded-2xl border-2 p-6 transition-all duration-300 hover:shadow-lg hover:scale-105 ${
                 selectedDesign === 'custom'
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
+                  : 'border-gray-200 hover:border-gray-300 bg-white'
               }`}
             >
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div 
-                  className={`h-20 w-full rounded border-4 border-dashed flex items-center justify-center transition-colors ${
-                    isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
-                  } ${customBackgroundUrl ? 'bg-cover bg-center' : 'bg-gray-50'}`}
+                  className={`h-24 w-full rounded-xl border-4 border-dashed flex items-center justify-center transition-all duration-300 ${
+                    isDragging ? 'border-blue-400 bg-blue-50 scale-105' : 'border-gray-300 bg-gray-50'
+                  } ${customBackgroundUrl ? 'bg-cover bg-center' : ''}`}
                   style={customBackgroundUrl ? { backgroundImage: `url(${customBackgroundUrl})` } : {}}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                 >
-                  {!customBackgroundUrl && (
+                  {!customBackgroundUrl ? (
                     <div className="text-center">
-                      <Upload className="h-6 w-6 mx-auto text-gray-400 mb-1" />
-                      <div className="text-xs font-medium text-gray-500">Upload Image</div>
+                      <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                      <div className="text-xs font-medium text-gray-500">Upload Design Sendiri</div>
+                      <div className="text-xs text-gray-400">🏠 Klik untuk upload</div>
                     </div>
-                  )}
-                  {customBackgroundUrl && (
-                    <div className="text-xs font-medium bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                      Custom Design
+                  ) : (
+                    <div className="text-xs font-medium bg-black bg-opacity-50 text-white px-3 py-2 rounded-lg">
+                      Custom Design ✨
                     </div>
                   )}
                 </div>
-                <div>
-                  <div className="font-medium text-slate-800">Custom Design</div>
-                  <div className="text-sm text-slate-600">Upload your own background image</div>
+                <div className="text-center">
+                  <div className="font-bold text-gray-800 text-lg">Custom Design</div>
+                  <div className="text-sm text-gray-600 mt-1">Upload design template sendiri</div>
                 </div>
               </div>
             </Label>

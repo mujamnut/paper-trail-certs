@@ -5,6 +5,7 @@ import CertificatePreview from '@/components/CertificatePreview';
 import CertificateDesigns, { CertificateDesign } from '@/components/CertificateDesigns';
 import ExcelUpload from '@/components/ExcelUpload';
 import BatchCertificates from '@/components/BatchCertificates';
+import { Trophy } from 'lucide-react';
 
 export interface CertificateData {
   recipientName: string;
@@ -40,30 +41,32 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-slate-800">Certificate Generator</h1>
-          <p className="text-slate-600 mt-2">Create professional certificates in minutes</p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-blue-500 to-blue-600">
+      {/* Beautiful Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl">
+        <div className="container mx-auto px-6 py-8">
+          <div className="flex items-center justify-center space-x-4">
+            <Trophy className="h-12 w-12 text-yellow-300" />
+            <div className="text-center">
+              <h1 className="text-4xl font-bold">Generator Sijil Malaysia</h1>
+              <p className="text-blue-100 mt-2 text-lg">Buat sijil profesional dengan mudah - Upload Excel & Download PDF</p>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Form Section */}
+          {/* Left Column - Forms */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-slate-800 mb-6">Certificate Details</h2>
-              <CertificateForm 
-                data={certificateData} 
-                onChange={setCertificateData} 
-              />
+            {/* Excel Upload Section */}
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+              <ExcelUpload onNamesExtracted={handleNamesExtracted} />
             </div>
 
             {/* Design Selection */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
               <CertificateDesigns 
                 selectedDesign={selectedDesign}
                 onDesignChange={setSelectedDesign}
@@ -72,16 +75,29 @@ const Index = () => {
               />
             </div>
 
-            {/* Excel Upload Section */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-slate-800 mb-6">Batch Generation</h2>
-              <ExcelUpload onNamesExtracted={handleNamesExtracted} />
+            {/* Certificate Settings */}
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="bg-blue-100 p-2 rounded-lg">
+                  <Trophy className="h-6 w-6 text-blue-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800">Tetapan Sijil</h2>
+              </div>
+              <CertificateForm 
+                data={certificateData} 
+                onChange={setCertificateData} 
+              />
             </div>
           </div>
 
-          {/* Preview Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-slate-800 mb-6">Preview</h2>
+          {/* Right Column - Preview */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-purple-100 p-2 rounded-lg">
+                <Trophy className="h-6 w-6 text-purple-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Preview & Generate</h2>
+            </div>
             {batchNames.length > 0 ? (
               <BatchCertificates 
                 names={batchNames}

@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Download, RefreshCw, FileDown } from 'lucide-react';
 import { CertificateData } from '@/pages/Index';
 import { CertificateDesign } from '@/components/CertificateDesigns';
 import { toast } from '@/hooks/use-toast';
@@ -91,6 +91,15 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design, c
           course: 'text-gray-800',
           seal: 'bg-gray-900'
         };
+      case 'tech':
+        return {
+          background: 'bg-gradient-to-br from-cyan-50 to-blue-100',
+          border: 'border-cyan-900',
+          title: 'text-cyan-900',
+          name: 'text-cyan-900 border-cyan-300',
+          course: 'text-cyan-800',
+          seal: 'bg-cyan-900'
+        };
       default:
         return {
           background: 'bg-gradient-to-br from-blue-50 to-indigo-100',
@@ -115,11 +124,11 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design, c
     : {};
 
   return (
-    <div className="space-y-4">
-      {/* Certificate */}
+    <div className="space-y-6">
+      {/* Certificate Preview */}
       <div 
         ref={certificateRef}
-        className={`${designClasses.background} border-8 ${designClasses.border} p-8 aspect-[4/3] flex flex-col justify-center items-center text-center relative overflow-hidden`}
+        className={`${designClasses.background} border-8 ${designClasses.border} p-8 aspect-[4/3] flex flex-col justify-center items-center text-center relative overflow-hidden rounded-2xl shadow-2xl`}
         style={{ minHeight: '400px', ...certificateStyle }}
       >
         {/* Decorative corner elements */}
@@ -129,7 +138,7 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design, c
         <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-gold-500"></div>
 
         {/* Certificate Content */}
-        <div className={`space-y-6 max-w-md ${design === 'custom' ? 'bg-white bg-opacity-90 p-6 rounded-lg' : ''}`}>
+        <div className={`space-y-6 max-w-md ${design === 'custom' ? 'bg-white bg-opacity-90 p-6 rounded-lg shadow-lg' : ''}`}>
           <h1 className={`text-4xl font-serif font-bold ${designClasses.title} mb-4`}>
             Certificate of Completion
           </h1>
@@ -169,19 +178,35 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design, c
         </div>
       </div>
 
-      {/* Download Button */}
-      <Button 
-        onClick={downloadCertificate}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-        disabled={!data.recipientName || !data.courseName}
-      >
-        <Download className="w-4 h-4 mr-2" />
-        Download Certificate
-      </Button>
+      {/* Action Buttons */}
+      <div className="space-y-4">
+        <Button 
+          className="w-full bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
+        >
+          <RefreshCw className="w-5 h-5 mr-2" />
+          🔄 Update Preview
+        </Button>
+
+        <Button 
+          className="w-full bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
+        >
+          <FileDown className="w-5 h-5 mr-2" />
+          📋 Generate Semua Sijil (PDF)
+        </Button>
+
+        <Button 
+          onClick={downloadCertificate}
+          disabled={!data.recipientName || !data.courseName}
+          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Download className="w-5 h-5 mr-2" />
+          🖼️ Download Preview (PNG)
+        </Button>
+      </div>
       
       {(!data.recipientName || !data.courseName) && (
-        <p className="text-sm text-slate-500 text-center">
-          Fill in the recipient name and course to enable download
+        <p className="text-sm text-gray-500 text-center bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+          💡 Isi nama peserta dan tajuk sijil untuk enable download
         </p>
       )}
     </div>
