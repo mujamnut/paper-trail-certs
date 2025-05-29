@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, FileText } from 'lucide-react';
 import { CertificateData } from '@/pages/Index';
+import { CertificateDesign } from '@/components/CertificateDesigns';
 import CertificatePreview from './CertificatePreview';
 
 interface BatchCertificatesProps {
   names: string[];
   baseData: CertificateData;
+  design: CertificateDesign;
   onClear: () => void;
 }
 
-const BatchCertificates: React.FC<BatchCertificatesProps> = ({ names, baseData, onClear }) => {
+const BatchCertificates: React.FC<BatchCertificatesProps> = ({ names, baseData, design, onClear }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentCertificateData: CertificateData = {
@@ -74,7 +76,7 @@ const BatchCertificates: React.FC<BatchCertificatesProps> = ({ names, baseData, 
         </div>
       </div>
 
-      <CertificatePreview data={currentCertificateData} />
+      <CertificatePreview data={currentCertificateData} design={design} />
     </div>
   );
 };

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import CertificateForm from '@/components/CertificateForm';
 import CertificatePreview from '@/components/CertificatePreview';
+import CertificateDesigns, { CertificateDesign } from '@/components/CertificateDesigns';
 import ExcelUpload from '@/components/ExcelUpload';
 import BatchCertificates from '@/components/BatchCertificates';
 
@@ -23,6 +24,7 @@ const Index = () => {
   });
 
   const [batchNames, setBatchNames] = useState<string[]>([]);
+  const [selectedDesign, setSelectedDesign] = useState<CertificateDesign>('classic');
 
   const handleNamesExtracted = (names: string[]) => {
     setBatchNames(names);
@@ -55,6 +57,14 @@ const Index = () => {
               />
             </div>
 
+            {/* Design Selection */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <CertificateDesigns 
+                selectedDesign={selectedDesign}
+                onDesignChange={setSelectedDesign}
+              />
+            </div>
+
             {/* Excel Upload Section */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-semibold text-slate-800 mb-6">Batch Generation</h2>
@@ -69,10 +79,11 @@ const Index = () => {
               <BatchCertificates 
                 names={batchNames}
                 baseData={certificateData}
+                design={selectedDesign}
                 onClear={clearBatch}
               />
             ) : (
-              <CertificatePreview data={certificateData} />
+              <CertificatePreview data={certificateData} design={selectedDesign} />
             )}
           </div>
         </div>
