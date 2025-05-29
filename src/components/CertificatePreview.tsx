@@ -9,9 +9,10 @@ import { toast } from '@/hooks/use-toast';
 interface CertificatePreviewProps {
   data: CertificateData;
   design: CertificateDesign;
+  customBackgroundUrl?: string;
 }
 
-const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design }) => {
+const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design, customBackgroundUrl }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
 
   const formatDate = (dateString: string) => {
@@ -42,6 +43,17 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design })
   };
 
   const getDesignClasses = () => {
+    if (design === 'custom') {
+      return {
+        background: customBackgroundUrl ? '' : 'bg-gradient-to-br from-gray-50 to-slate-100',
+        border: 'border-gray-900',
+        title: 'text-gray-900',
+        name: 'text-gray-900 border-gray-400',
+        course: 'text-gray-800',
+        seal: 'bg-gray-900'
+      };
+    }
+
     switch (design) {
       case 'classic':
         return {
@@ -93,13 +105,22 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design })
 
   const designClasses = getDesignClasses();
 
+  const certificateStyle = design === 'custom' && customBackgroundUrl 
+    ? { 
+        backgroundImage: `url(${customBackgroundUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
   return (
     <div className="space-y-4">
       {/* Certificate */}
       <div 
         ref={certificateRef}
         className={`${designClasses.background} border-8 ${designClasses.border} p-8 aspect-[4/3] flex flex-col justify-center items-center text-center relative overflow-hidden`}
-        style={{ minHeight: '400px' }}
+        style={{ minHeight: '400px', ...certificateStyle }}
       >
         {/* Decorative corner elements */}
         <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-gold-500"></div>
@@ -108,7 +129,7 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ data, design })
         <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-gold-500"></div>
 
         {/* Certificate Content */}
-        <div className="space-y-6 max-w-md">
+        <div className={`space-y-6 max-w-md ${design === 'custom' ? 'bg-white bg-opacity-90 p-6 rounded-lg' : ''}`}>
           <h1 className={`text-4xl font-serif font-bold ${designClasses.title} mb-4`}>
             Certificate of Completion
           </h1>

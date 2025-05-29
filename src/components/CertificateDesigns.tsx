@@ -1,13 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Upload } from 'lucide-react';
 
-export type CertificateDesign = 'classic' | 'modern' | 'elegant' | 'corporate';
+export type CertificateDesign = 'classic' | 'modern' | 'elegant' | 'corporate' | 'custom';
 
 interface CertificateDesignsProps {
   selectedDesign: CertificateDesign;
   onDesignChange: (design: CertificateDesign) => void;
+  customBackgroundUrl?: string;
+  onCustomBackgroundUpload: (url: string) => void;
 }
 
 const designs = [
@@ -37,7 +41,47 @@ const designs = [
   }
 ];
 
-const CertificateDesigns: React.FC<CertificateDesignsProps> = ({ selectedDesign, onDesignChange }) => {
+const CertificateDesigns: React.FC<CertificateDesignsProps> = ({ 
+  selectedDesign, 
+  onDesignChange, 
+  customBackgroundUrl,
+  onCustomBackgroundUpload 
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleFileUpload = (file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      const url = URL.createObjectURL(file);
+      onCustomBackgroundUpload(url);
+      onDesignChange('custom');
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium text-slate-800">Choose Certificate Design</h3>
@@ -70,6 +114,57 @@ const CertificateDesigns: React.FC<CertificateDesignsProps> = ({ selectedDesign,
               </Label>
             </div>
           ))}
+          
+          {/* Custom Design Upload Option */}
+          <div className="relative">
+            <RadioGroupItem
+              value="custom"
+              id="custom"
+              className="sr-only"
+            />
+            <Label
+              htmlFor="custom"
+              className={`block cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                selectedDesign === 'custom'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="space-y-3">
+                <div 
+                  className={`h-20 w-full rounded border-4 border-dashed flex items-center justify-center transition-colors ${
+                    isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
+                  } ${customBackgroundUrl ? 'bg-cover bg-center' : 'bg-gray-50'}`}
+                  style={customBackgroundUrl ? { backgroundImage: `url(${customBackgroundUrl})` } : {}}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                >
+                  {!customBackgroundUrl && (
+                    <div className="text-center">
+                      <Upload className="h-6 w-6 mx-auto text-gray-400 mb-1" />
+                      <div className="text-xs font-medium text-gray-500">Upload Image</div>
+                    </div>
+                  )}
+                  {customBackgroundUrl && (
+                    <div className="text-xs font-medium bg-black bg-opacity-50 text-white px-2 py-1 rounded">
+                      Custom Design
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="font-medium text-slate-800">Custom Design</div>
+                  <div className="text-sm text-slate-600">Upload your own background image</div>
+                </div>
+              </div>
+            </Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleInputChange}
+              className="absolute inset-0 opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
       </RadioGroup>
     </div>

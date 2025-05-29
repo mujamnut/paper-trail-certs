@@ -10,10 +10,17 @@ interface BatchCertificatesProps {
   names: string[];
   baseData: CertificateData;
   design: CertificateDesign;
+  customBackgroundUrl?: string;
   onClear: () => void;
 }
 
-const BatchCertificates: React.FC<BatchCertificatesProps> = ({ names, baseData, design, onClear }) => {
+const BatchCertificates: React.FC<BatchCertificatesProps> = ({ 
+  names, 
+  baseData, 
+  design, 
+  customBackgroundUrl,
+  onClear 
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentCertificateData: CertificateData = {
@@ -76,7 +83,11 @@ const BatchCertificates: React.FC<BatchCertificatesProps> = ({ names, baseData, 
         </div>
       </div>
 
-      <CertificatePreview data={currentCertificateData} design={design} />
+      <CertificatePreview 
+        data={currentCertificateData} 
+        design={design} 
+        customBackgroundUrl={customBackgroundUrl}
+      />
     </div>
   );
 };

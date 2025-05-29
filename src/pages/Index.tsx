@@ -25,6 +25,7 @@ const Index = () => {
 
   const [batchNames, setBatchNames] = useState<string[]>([]);
   const [selectedDesign, setSelectedDesign] = useState<CertificateDesign>('classic');
+  const [customBackgroundUrl, setCustomBackgroundUrl] = useState<string>('');
 
   const handleNamesExtracted = (names: string[]) => {
     setBatchNames(names);
@@ -32,6 +33,10 @@ const Index = () => {
 
   const clearBatch = () => {
     setBatchNames([]);
+  };
+
+  const handleCustomBackgroundUpload = (url: string) => {
+    setCustomBackgroundUrl(url);
   };
 
   return (
@@ -62,6 +67,8 @@ const Index = () => {
               <CertificateDesigns 
                 selectedDesign={selectedDesign}
                 onDesignChange={setSelectedDesign}
+                customBackgroundUrl={customBackgroundUrl}
+                onCustomBackgroundUpload={handleCustomBackgroundUpload}
               />
             </div>
 
@@ -80,10 +87,15 @@ const Index = () => {
                 names={batchNames}
                 baseData={certificateData}
                 design={selectedDesign}
+                customBackgroundUrl={customBackgroundUrl}
                 onClear={clearBatch}
               />
             ) : (
-              <CertificatePreview data={certificateData} design={selectedDesign} />
+              <CertificatePreview 
+                data={certificateData} 
+                design={selectedDesign} 
+                customBackgroundUrl={customBackgroundUrl}
+              />
             )}
           </div>
         </div>
