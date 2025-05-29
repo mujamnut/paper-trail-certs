@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import CertificateForm from '@/components/CertificateForm';
 import CertificatePreview from '@/components/CertificatePreview';
+import ExcelUpload from '@/components/ExcelUpload';
+import BatchCertificates from '@/components/BatchCertificates';
 
 export interface CertificateData {
   recipientName: string;
@@ -20,6 +22,16 @@ const Index = () => {
     issuerTitle: ''
   });
 
+  const [batchNames, setBatchNames] = useState<string[]>([]);
+
+  const handleNamesExtracted = (names: string[]) => {
+    setBatchNames(names);
+  };
+
+  const clearBatch = () => {
+    setBatchNames([]);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -34,18 +46,34 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Form Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-slate-800 mb-6">Certificate Details</h2>
-            <CertificateForm 
-              data={certificateData} 
-              onChange={setCertificateData} 
-            />
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-slate-800 mb-6">Certificate Details</h2>
+              <CertificateForm 
+                data={certificateData} 
+                onChange={setCertificateData} 
+              />
+            </div>
+
+            {/* Excel Upload Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-slate-800 mb-6">Batch Generation</h2>
+              <ExcelUpload onNamesExtracted={handleNamesExtracted} />
+            </div>
           </div>
 
           {/* Preview Section */}
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-xl font-semibold text-slate-800 mb-6">Preview</h2>
-            <CertificatePreview data={certificateData} />
+            {batchNames.length > 0 ? (
+              <BatchCertificates 
+                names={batchNames}
+                baseData={certificateData}
+                onClear={clearBatch}
+              />
+            ) : (
+              <CertificatePreview data={certificateData} />
+            )}
           </div>
         </div>
       </div>
